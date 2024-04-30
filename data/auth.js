@@ -2,7 +2,7 @@ let users = [
     {
         id: '1',
         username: 'apple',
-        password: '1111',
+        password: '$2b$10$SwtnnOxWHHbmvMWx3E3oHugUTBQp5sfhOHJreTifnv6LVhcBhrcQ6',
         name: '김사과',
         email: 'apple@apple.com',
         url: 'https://img.hankyung.com/photo/202403/AA.36104679.1.jpg'
