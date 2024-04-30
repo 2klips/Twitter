@@ -1,4 +1,5 @@
 import * as tweetRepository from '../data/tweet.js';
+import { body, param, validationResult } from 'express-validator';
 
 // 모든 트윗을 가져오는 함수
 export async function getTweets(req, res){
@@ -37,7 +38,7 @@ export async function updateTweet(req, res, next){
         res.status(404).json({message: `${id}의 트윗이 없습니다`});
     }
 }
-
+ 
 // 트윗을 삭제하는 함수
 export async function deleteTweet(req, res, next){
     const id = req.params.id;
