@@ -1,61 +1,50 @@
-let tweets = [
-    {
-        id: '1',
-        text: '안녕하세요!',
-        createdAt: Date.now().toString(),
-        name: '김사과',
-        username: 'apple',
-        url: 'https://img.hankyung.com/photo/202403/AA.36104679.1.jpg'
-    },
-    {
-        id: '2',
-        text: '반갑습니다!!',
-        createdAt: Date.now().toString(),
-        name: '반하나',
-        username: 'banana',
-        url: 'https://www.sisajournal.com/news/photo/202105/216731_124666_4150.jpg'
-    }
-];
+import { db } from '../db/database.js';
+
+const SELECT_JOIN = `SELECT tw.id, tw.text, tw.createdAt, tw.userId, us.username, us.name, us.email, us.url from tweets as tw join users as us on tw.userId = us.id`;
+
+const ORDER_DESC = 'order by tw.createdAt desc'
 
 // 모든 트윗을 리턴
-export async function getAll() {
-    return tweets;
+export async function getAll(){
+    return db.execute(`${SELECT_JOIN} ${ORDER_DESC}`).then((result) => {
+        console.log(result);
+        return result;
+    });
 }
 
-// 해당 아이디에 대한 트윗을 리턴
-export async function getAllByUsername(username) {
-    return tweets.filter((tweet) => tweet.username == username)
+// id에 해당하는 트윗을 리턴
+export async function getAllByUsername(username){
+    return db.execute(`${SELECT_JOIN} where username = ? ${ORDER_DESC}`, [username]).then((result) => {
+        console.log(result);
+        return result;
+    });
 }
 
-// 글 번호에 대한 트윗을 리턴
-export async function getById(id) {
-    return tweets.find((tweet) => tweet.id === id);
+// 글번호에 대한 트윗을 리턴
+export async function getById(id){
+    return db.execute(`${SELECT_JOIN} where tw.id = ? ${ORDER_DESC}`, [id]).then((result) => {
+        console.log(result);
+        return result;
+    });
 }
 
 // 트윗을 작성
-export async function create(text, name, username) {
-    const tweet = {
-        id: '10',
-        text,
-        createAt: Date.now().toString(),
-        name,
-        username
-    };
-    tweets = [tweet, ...tweets];
-    return tweet
+export async function create(text, userId){
+    return db.execute('insert into tweets (text, userId) values (?, ?)', [text, userId]).then((result) => {
+        console.log(result);
+        return getById(result[0].insertId);
+    });
 }
 
 // 트윗을 변경
 export async function update(id, text){
-    const tweet = tweets.find((tweet) => tweet.id == id);
-    if(tweet){
-        tweet.text = text;
-    }
-    return tweet;
+    return db.execute('update tweets set text = ? where id = ?', [text, id]).then((result) => {
+        console.log(result);
+        return getById(id);
+    });
 }
 
-//트윗을 삭제
+// 트윗을 삭제
 export async function remove(id){
-    tweets = tweets.filter((tweet) => tweet.id !== id);
+    return db.execute('delete from tweets where id = ?', [id]);
 }
-
