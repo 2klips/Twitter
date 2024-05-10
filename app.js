@@ -19,6 +19,6 @@ app.use((req, res, next) => {
 
 // DB 연결 테스트
 connectDB().then((db) => {
-    console.log('몽고DB 연결 성공!')
+    console.log('몽구스를 사용하여 MongoDB에 접속 성공!')
     app.listen(config.host.port);
 }).catch(console.error);
