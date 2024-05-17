@@ -1,3 +1,4 @@
+import { getSocketIO } from '../connection/socket.js';
 import * as tweetRepository from '../data/tweet.js';
 
 // 여러 트윗을 가져오는 함수
@@ -25,6 +26,7 @@ export async function createTweet(req, res, next) {
     // body('text').trim().isLength({min:3}).withMessage('텍스트는 세글자 이상으로 입력!')
     const tweet = await tweetRepository.create(text, req.userId);
     res.status(201).json(tweet);
+    getSocketIO().emit('tweets', tweet);
 };
 
 

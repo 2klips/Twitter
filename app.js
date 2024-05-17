@@ -4,6 +4,7 @@ import tweetsRouter from "./router/tweets.js";
 import authRouter from "./router/auth.js";
 import { config } from "./config.js";
 import { connectDB } from "./db/database.js";
+import { initSocket } from "./connection/socket.js";
 
 const app = express();
 
@@ -17,8 +18,10 @@ app.use((req, res, next) => {
     res.sendStatus(404);
 });
 
-// DB 연결 테스트
+
+//DB 연결 테스트
 connectDB().then((db) => {
-    console.log('몽구스를 사용하여 MongoDB에 접속 성공!')
+    const server = app.listen(config.host.port);
+    initSocket(server);
     app.listen(config.host.port);
 }).catch(console.error);

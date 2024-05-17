@@ -1,6 +1,7 @@
 import Mongogoose from 'mongoose';
 import { useVirtualId } from '../db/database.js';
 import * as authRepository from './auth.js';
+import { config } from 'dotenv';
 
 const tweetSchema = new Mongogoose.Schema({
     text: {type: String, require: true},
